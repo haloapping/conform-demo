@@ -34,7 +34,7 @@ const schema = z.object({
       "Password must contain at least one special character",
     ),
 });
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const submission = parseWithZod(formData, { schema });
 
@@ -42,6 +42,7 @@ export async function action({ request }: Route.ActionArgs) {
     return submission.reply();
   }
 
+  console.log(formData);
   return redirect("/dashboard");
 }
 
@@ -63,34 +64,34 @@ export default function Home({ actionData }: Route.ComponentProps) {
             <CardTitle className="text-center">Login</CardTitle>
           </CardHeader>
           <CardContent>
-            <form>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <label htmlFor="email">Email</label>
-                  <Input
-                    key={fields.email.key}
-                    name={fields.email.name}
-                    id="email"
-                    placeholder="Your Email"
-                  />
-                  <p className="text-sm text-red-500">{fields.email.errors}</p>
-                </div>
-
-                <div className="flex flex-col space-y-1.5">
-                  <label htmlFor="password">Password</label>
-                  <Input
-                    key={fields.password.key}
-                    name={fields.password.name}
-                    id="password"
-                    type="password"
-                    placeholder="Your Password"
-                  />
-                  <p className="text-sm text-red-500">
-                    {fields.password.errors}
-                  </p>
-                </div>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <label htmlFor="email">Email</label>
+                <Input
+                  key={fields.email.key}
+                  name={fields.email.name}
+                  id="email"
+                  placeholder="Your Email"
+                />
+                <p className="text-sm text-red-500">{fields.email.errors}</p>
               </div>
-            </form>
+
+              <div className="flex flex-col space-y-1.5">
+                <label htmlFor="password">Password</label>
+                <Input
+                  key={fields.password.key}
+                  name={fields.password.name}
+                  id="password"
+                  type="password"
+                  placeholder="Your Password"
+                />
+                {fields.password.errors?.map((error, index) => (
+                  <li key={index} className="text-sm text-red-500">
+                    {error}
+                  </li>
+                ))}
+              </div>
+            </div>
           </CardContent>
           <CardFooter className="flex justify-center">
             <Button>Login</Button>
