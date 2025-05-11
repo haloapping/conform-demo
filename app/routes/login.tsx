@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/login";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -34,6 +34,7 @@ const schema = z.object({
       "Password must contain at least one special character",
     ),
 });
+
 export async function action({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const submission = parseWithZod(formData, { schema });
